@@ -25,12 +25,6 @@ export const getProduct = asyncHandler(async (req, res) => {
 
 // create new product /api/v1/admin/products
 export const newProduct = asyncHandler(async (req, res, next) => {
-  const { error } = validateProduct(req.body);
-
-  if (error) {
-    return next(new ApiError(error.message, 500));
-  }
-
   const product = await Product.create(req.body);
 
   res.status(200).json({
