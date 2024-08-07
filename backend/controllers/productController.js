@@ -1,10 +1,12 @@
 import Product from "../models/productModel.js";
+import ApiError from "../util/apiErrors.js";
 import APIFilters from "../util/apiFilters.js";
+import { asyncHandler } from "../util/asyncHandler.js";
 import { validateProduct } from "../util/productValidator.js";
 import mongoose from "mongoose";
 
 //get all products /api/v1/products
-export const getProduct = async (req, res) => {
+export const getProduct = asyncHandler(async (req, res) => {
   const resPerPage = 4;
   const apiFilters = new APIFilters(Product, req.query).search().filters();
 
@@ -19,17 +21,14 @@ export const getProduct = async (req, res) => {
     filteredProductsCount,
     products,
   });
-};
+});
 
 // create new product /api/v1/admin/products
-export const newProduct = async (req, res) => {
+export const newProduct = asyncHandler(async (req, res, next) => {
   const { error } = validateProduct(req.body);
 
   if (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.details[0].message,
-    });
+    return next(new ApiError(error.message, 500));
   }
 
   const product = await Product.create(req.body);
@@ -39,62 +38,48 @@ export const newProduct = async (req, res) => {
     message: "product created successfully",
     product,
   });
-};
+});
 
 // get single product /api/v1/products/:id
-export const getProductDetails = async (req, res) => {
+export const getProductDetails = asyncHandler(async (req, res, next) => {
   try {
     const id = req?.params?.id;
 
     // Validate the ID format
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid product ID format",
-      });
+      return next(new ApiError("Invalid product ID format", 400));
     }
 
     const product = await Product.findById(id);
 
     if (!product) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
+      return next(new ApiError("Product not found", 404));
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "product found",
+      message: "Product found",
       product,
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "Server error",
-      error: error.message,
-    });
+    next(new ApiError(error.message, 500));
   }
-};
+});
 
 // update product /api/v1/products/:id
-export const updateProductDetails = async (req, res) => {
+export const updateProductDetails = asyncHandler(async (req, res, next) => {
   try {
     const id = req?.params?.id;
 
     // Validate the ID format
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid product ID format",
-      });
+      return next(new APIFilters("Invalid product ID format", 400));
     }
 
     let product = await Product.findById(id);
 
     if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
+      return next(new ApiError("Product not found", 404));
     }
 
     product = await Product.findByIdAndUpdate(id, req.body, { new: true });
@@ -105,34 +90,24 @@ export const updateProductDetails = async (req, res) => {
       product,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: error.message,
-    });
+    return next(new ApiError(error.message, 500));
   }
-};
+});
 
 // delete product /api/v1/products/:id
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = asyncHandler(async (req, res, next) => {
   try {
     const id = req?.params?.id;
 
     // Validate the ID format
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid product ID format",
-      });
+      return next(new ApiError("Invalid ID format", 401));
     }
 
     let product = await Product.findById(id);
 
     if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
+      return next(new ApiError("Product not found", 404));
     }
 
     product = await Product.findByIdAndDelete(id);
@@ -142,25 +117,17 @@ export const deleteProduct = async (req, res) => {
       message: "deleted successfully",
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: error.message,
-    });
+    return next(new ApiError(error.message, 500));
   }
-};
+});
 
 // search api /api/v1/products/search
-export const searchProduct = async (req, res) => {
+export const searchProduct = asyncHandler(async (req, res, next) => {
   try {
     res.status(200).json({
       keyword: req.query.keyword,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: error.message,
-    });
+    return next(new APIFilters(error.message, 500));
   }
-};
+});
