@@ -25,6 +25,10 @@ export const getProduct = asyncHandler(async (req, res) => {
 
 // create new product /api/v1/admin/products
 export const newProduct = asyncHandler(async (req, res, next) => {
+  // in userAuthentication middleware we asign user in req.user
+  // that can be accesed here and can added in req.body
+  req.body.user = req.user._id;
+
   const product = await Product.create(req.body);
 
   res.status(200).json({
