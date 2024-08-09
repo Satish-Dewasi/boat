@@ -10,6 +10,8 @@ export const getProduct = asyncHandler(async (req, res) => {
   const resPerPage = 4;
   const apiFilters = new APIFilters(Product, req.query).search().filters();
 
+  console.log(req?.user);
+
   let products = await apiFilters.query;
   let filteredProductsCount = products.length;
 
