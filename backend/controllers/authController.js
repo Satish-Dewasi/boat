@@ -5,6 +5,7 @@ import sendToken from "../util/sendToken.js";
 import { getResetPasswordTemplate } from "../util/emailTemplate.js";
 import sendEmail from "../util/sendEMail.js";
 import crypto from "crypto";
+import { log } from "console";
 
 // Register user   =>  /api/v1/register
 export const registerUser = asyncHandler(async (req, res, next) => {
@@ -133,7 +134,6 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
 
 
 // get user profile =>  /api/v1/profile
-
 export const getUserProfile= asyncHandler(async (req, res, next) =>{
     const user = await User.findById(req?.user?._id);
     
@@ -141,3 +141,126 @@ export const getUserProfile= asyncHandler(async (req, res, next) =>{
       user,
     })
 }) 
+
+
+// Update Password => /api/v1/password/update
+export const updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req?.user?._id).select("+password");
+  
+  if (!user) {
+    return next(new ApiError("User not found", 404));
+  }
+
+  const { oldPassword, newPassword } = req.body;
+
+  if (!oldPassword || !newPassword) {
+    return next(new ApiError("Old password and new password are required", 400));
+  }
+
+  const isPasswordMatched = await user.comparePassword(oldPassword);
+
+  if (!isPasswordMatched) {
+    return next(new ApiError("Old password is incorrect", 400));
+  }
+
+  user.password = newPassword;
+
+  try {
+    await user.save();
+
+    res.status(200).json({
+      message: "Password updated successfully",
+      user,
+    });
+  } catch (error) {
+    return next(new ApiError("Failed to update password", 500));
+  }
+});
+
+
+// Update user Profile => /api/v1/profile/update
+export const updateProfile = asyncHandler(async (req, res, next) => {
+
+     const newUserData = { name : req.body.name,email : req.body.email, };
+
+     const user = await User.findByIdAndUpdate(req.user._id, newUserData, {new: true});
+
+     res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+     })
+
+});
+
+
+// Get all User ADMIN => /api/v1/admin/users
+export const getAllUsers = asyncHandler(async (req, res, next) => {
+
+  const users = await User.find();
+
+  res.status(200).json({
+    success: true,
+   message: "All users fatched succcessfully",
+   users,
+  })
+
+});
+
+
+// Get User Details ADMIN => /api/v1/admin/users/:id
+export const getUserDetails = asyncHandler(async (req, res, next) => {
+
+  const user = await User.findById(req.params.id);
+
+  if(!user){
+    return next(new ApiError(`User not found with this ID - ${req.params.id}`));
+  }
+  
+  res.status(200).json({
+   success: true,
+   message: "User details fatched succcessfully",
+   user,
+  })
+
+});
+
+
+// update User Details ADMIN => /api/v1/admin/users/:id
+export const updateUserDetails = asyncHandler(async (req, res, next) => {
+
+  const newUserData = {
+     name : req.body.name,
+     email : req.body.email,
+     role : req.body.role,
+    };
+
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {new:true});
+
+  
+  res.status(200).json({
+   success: true,
+   message: "User updated fatched succcessfully",
+   user,
+  })
+
+});
+
+// delete User ADMIN => /api/v1/admin/users/:id
+export const DeleteUser = asyncHandler(async (req, res, next) => {
+
+  const user = await User.findById(req.params.id);
+
+  if(!user){
+    return next(new ApiError(`User not found with this ID - ${req.params.id}`));
+  }
+
+  await User.deleteOne();
+
+  // remove user avatar from cloudnary
+  
+  res.status(200).json({
+   success: true,
+   message: "User Deleted succcessfully",
+  })
+
+});

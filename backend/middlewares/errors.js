@@ -13,6 +13,12 @@ export default (err, req, res, next) => {
     error = new ApiError(message, 400);
   }
 
+   // Handle Invalid Mongoose ID Error
+   if (err.name === "CastError") {
+    const message = `Resource not found. Invalid: ${err?.path}`;
+    error = new ApiError(message, 404);
+  }
+
   // handling duplicate key
   if (err.code == 11000 ) {
     const message = `Duplicate ${Object.keys(err.keyValue)} entered `
