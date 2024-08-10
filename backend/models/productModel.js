@@ -5,7 +5,6 @@ const productSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Please enter product name"],
-      maxLength: [200, "Product name cannot exceed 200 characters"],
     },
 
     price: {
@@ -101,7 +100,7 @@ const productSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: false,
+      required: true,
     },
   },
   { timestamps: true }
