@@ -94,39 +94,39 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
   }
 });
 
-// // Reset password   =>  /api/v1/password/reset/:token
-// export const resetPassword = catchAsyncErrors(async (req, res, next) => {
-//   // Hash the URL Token
-//   const resetPasswordToken = crypto
-//     .createHash("sha256")
-//     .update(req.params.token)
-//     .digest("hex");
+// Reset password   =>  /api/v1/password/reset/:token
+export const resetPassword = asyncHandler(async (req, res, next) => {
+  // Hash the URL Token
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
 
-//   const user = await User.findOne({
-//     resetPasswordToken,
-//     resetPasswordExpire: { $gt: Date.now() },
-//   });
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
 
-//   if (!user) {
-//     return next(
-//       new ErrorHandler(
-//         "Password reset token is invalid or has been expired",
-//         400
-//       )
-//     );
-//   }
+  if (!user) {
+    return next(
+      new ApiError(
+        "Password reset token is invalid or has been expired",
+        400
+      )
+    );
+  }
 
-//   if (req.body.password !== req.body.confirmPassword) {
-//     return next(new ErrorHandler("Passwords does not match", 400));
-//   }
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(new ApiError("Passwords does not match", 400));
+  }
 
-//   // Set the new password
-//   user.password = req.body.password;
+  // Set the new password
+  user.password = req.body.password;
 
-//   user.resetPasswordToken = undefined;
-//   user.resetPasswordExpire = undefined;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
 
-//   await user.save();
+  await user.save();
 
-//   sendToken(user, 200, res);
-// });
+  sendToken(user, 200, res);
+});
