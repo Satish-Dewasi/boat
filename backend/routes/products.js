@@ -1,7 +1,10 @@
 import {
+  createProductReview,
   deleteProduct,
+  deleteReview,
   getProduct,
   getProductDetails,
+  getProductReviews,
   newProduct,
   searchProduct,
   updateProductDetails,
@@ -39,6 +42,20 @@ router
 //create
 router
   .route("/admin/products")
-  .post(isAuthenticatedUser, authorizeRole("admin", "customer"), newProduct);
+  .post(isAuthenticatedUser, authorizeRole("admin"), newProduct);
+
+//reviews
+
+router
+  .route("/reviews")
+  .put(isAuthenticatedUser,  createProductReview)
+  .get(isAuthenticatedUser,  getProductReviews);
+  
+  
+router.route("/admin/reviews")
+      .delete(isAuthenticatedUser , authorizeRole("admin"), deleteReview);
+
+
+
 
 export default router;
