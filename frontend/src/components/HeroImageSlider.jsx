@@ -1,27 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { GrNext } from "react-icons/gr";
-import { GrPrevious } from "react-icons/gr";
+import React from "react";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { Slide } from "react-slideshow-image";
+import "react-slideshow-image/dist/styles.css"; // Import the default styles
 
 function HeroImageSlider() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  };
-
-  // auto changing slide logic
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 4000);
-    return () => clearInterval(intervalId);
-  }, []);
-
   const slides = [
     {
       id: 1,
@@ -35,7 +17,6 @@ function HeroImageSlider() {
       id: 3,
       img: "https://res.cloudinary.com/dmrw4vltk/image/upload/v1717380235/e-commerce/banners/Shoe-Cover-4_toowgg.jpg",
     },
-
     {
       id: 4,
       img: "https://res.cloudinary.com/dmrw4vltk/image/upload/v1717380292/e-commerce/banners/hero_banner_3_oiuh12.webp",
@@ -46,37 +27,47 @@ function HeroImageSlider() {
     },
   ];
 
+  const styles = {
+    slideEffect: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundSize: "cover",
+      height: "350px",
+    },
+  };
+
+  const properties = {
+    autoplay: true,
+    duration: 3000,
+    prevArrow: (
+      <button className="hidden mx-2 font-bold text-gray-300 rounded-[50%] p-2 text-2xl lg:block">
+        <GrPrevious />
+      </button>
+    ),
+    nextArrow: (
+      <button className="hidden  mx-2 font-bold text-gray-300 rounded-[50%] p-2 text-2xl lg:block">
+        <GrNext />
+      </button>
+    ),
+  };
+
   return (
-    <div className="h-[30vh] md:h-[50vh] lg:h-[70vh] xl:h-[100vh] relative ">
-      {/* prev and next buttons */}
-
-      <div className="absolute  z-50 cursor-pointer text-white text-2xl top-[50%] left-3  md:left-7 transform translate-x-0 translate-y-[-50%]  ">
-        <GrPrevious onClick={handlePrevious} size={30} />
-      </div>
-      <div className="absolute z-50 cursor-pointer text-white text-2xl top-[50%] right-3  md:right-7 transform translate-x-0 translate-y-[-50%]  ">
-        <GrNext onClick={handleNext} size={30} />
-      </div>
-
-      {/* navigation dots */}
-      <div className="absolute hidden md:flex gap-2 z-50 bottom-7 left-[46%]">
-        {slides.map((slide, index) => (
+    <Slide {...properties}>
+      {slides.map((slide) => (
+        <div
+          key={slide.id}
+          className=" w-full h-[34vh] sm:h-[60vh] md:h-[75vh] lg:h-[92vh] "
+        >
           <div
-            onClick={() => setCurrentIndex(index)}
-            key={index}
-            className={
-              currentIndex === index
-                ? "w-3 h-3 cursor-pointer bg-slate-400 rounded-full"
-                : "w-3 h-3 cursor-pointer bg-white rounded-full"
-            }
+            className=" h-full flex items-center justify-center bg-cover"
+            style={{
+              backgroundImage: `url(${slide.img})`,
+            }}
           ></div>
-        ))}
-      </div>
-
-      <div
-        className="w-full h-[30vh] md:h-[50vh] lg:h-[70vh] xl:h-[100vh] rounded[10px]  bg-center bg-cover   "
-        style={{ backgroundImage: `url(${slides[currentIndex].img})` }}
-      ></div>
-    </div>
+        </div>
+      ))}
+    </Slide>
   );
 }
 

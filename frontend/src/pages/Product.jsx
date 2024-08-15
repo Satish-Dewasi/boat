@@ -69,11 +69,11 @@ function Product() {
       {/* filter and sort */}
       <div className="w-full h-[10vh] flex items-center justify-between px-4  ">
         {/* filter */}
-        <div className="flex items-center gap-1 font-semibold text-xl w-fit rounded-md border-2 border-gray-300 bg-gray-200 px-3 py-1  ">
+         <div className="flex items-center gap-1 font-semibold text-xl w-fit rounded-md border-2 border-gray-300 bg-gray-200 px-3 py-1  ">
           <IoOptionsOutline /> Filters <IoChevronDown className="mt-[6px] " />
-        </div>
+     </div>
 
-        {/* sort */}
+        {/* sort  */}
 
         <div className="h-full flex items-center relative">
           <button
