@@ -7,35 +7,25 @@ function HeroImageSlider() {
   const slides = [
     {
       id: 1,
-      img: "https://res.cloudinary.com/dmrw4vltk/image/upload/v1717380132/e-commerce/banners/Shoe-Cover-1_krzv1j.jpg",
+      img: "images/banners/1.webp",
     },
     {
       id: 2,
-      img: "https://res.cloudinary.com/dmrw4vltk/image/upload/v1717380212/e-commerce/banners/Shoe-Cover-3_yhzwa1.jpg",
+      img: "images/banners/2.webp",
     },
     {
       id: 3,
-      img: "https://res.cloudinary.com/dmrw4vltk/image/upload/v1717380235/e-commerce/banners/Shoe-Cover-4_toowgg.jpg",
+      img: "images/banners/3.webp",
     },
     {
       id: 4,
-      img: "https://res.cloudinary.com/dmrw4vltk/image/upload/v1717380292/e-commerce/banners/hero_banner_3_oiuh12.webp",
+      img: "images/banners/4.webp",
     },
     {
       id: 5,
-      img: "https://res.cloudinary.com/dmrw4vltk/image/upload/v1717380329/e-commerce/banners/hero_banner_4_hd4afe.webp",
+      img: "images/banners/5.webp",
     },
   ];
-
-  const styles = {
-    slideEffect: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundSize: "cover",
-      height: "350px",
-    },
-  };
 
   const properties = {
     autoplay: true,

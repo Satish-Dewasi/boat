@@ -3,8 +3,16 @@ import HeroSlider from "../components/HeroSlider";
 import ProductSlider from "../components/ProductSlider";
 import HeroImageSlider from "../components/HeroImageSlider";
 import MetaData from "../components/MetaData";
+import { useGetProductsQuery } from "../redux/api/productApi";
 
 function Hero() {
+  // const { data, isLoading, error } = useGetProductsQuery();
+
+  // // For debugging purposes
+  // console.log("Loading:", isLoading);
+  // console.log("Error:", error);
+  // console.log("Data:", data);
+
   return (
     <>
       <MetaData

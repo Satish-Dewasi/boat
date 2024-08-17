@@ -4,11 +4,11 @@ import { IoCloseSharp } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
 import { BsHandbag } from "react-icons/bs";
 import { Link, NavLink, useParams } from "react-router-dom";
-import { IoIosSearch } from "react-icons/io";
 import { IoChevronDown } from "react-icons/io5";
 import { BsPlus } from "react-icons/bs";
 import { BsDash } from "react-icons/bs";
 import { IoChevronForwardOutline } from "react-icons/io5";
+import Search from "./Search";
 
 function Navbar() {
   const [isActive, setActive] = useState(false);
@@ -26,51 +26,49 @@ function Navbar() {
   const categories = [
     {
       id: 1,
-      name : "earbuds",
-      url : "../images/categories/earbuds.png"
+      name: "earbuds",
+      url: "/images/categories/earbuds.png",
     },
 
     {
       id: 2,
-      name : "speakers",
-      url : "../images/categories/speakers.png"
+      name: "speakers",
+      url: "/images/categories/speakers.png",
     },
 
     {
       id: 3,
-      name : "party-speakers",
-      url : "../images/categories/party-speakers.png"
+      name: "party-speakers",
+      url: "/images/categories/party-speakers.png",
     },
 
     {
       id: 4,
-      name : "wired-headphones",
-      url : "../images/categories/wired-headphones.png"
+      name: "wired-headphones",
+      url: "/images/categories/wired-headphones.png",
     },
 
     {
       id: 5,
-      name : "wireless-headphones",
-      url : "../images/categories/wireless-headphones.png"
+      name: "wireless-headphones",
+      url: "/images/categories/wireless-headphones.png",
     },
 
     {
       id: 6,
-      name : "neckbands",
-      url : "../images/categories/neckbands.png"
+      name: "neckbands",
+      url: "/images/categories/neckbands.png",
     },
     {
       id: 7,
-      name : "gaming-headphones",
-      url : "../images/categories/gaming-headphones.png"
+      name: "gaming-headphones",
+      url: "/images/categories/gaming-headphones.png",
     },
     {
       id: 8,
-      name : "wired-earphones",
-      url : "../images/categories/wired-earphones.png"
+      name: "wired-earphones",
+      url: "/images/categories/wired-earphones.png",
     },
-
-
   ];
 
   const replaceDashesWithSpaces = (str) => {
@@ -181,13 +179,7 @@ function Navbar() {
         </div>
 
         <div className="flex gap-3 items-center  text-[22px]  ">
-          <div className="w-fit md:w-[170px] md:rounded-[20px] md:px-2 md:bg-gray-200 lg:w-[200px] h-[35px] flex items-center  ">
-            <input
-              className="hidden md:block w-[85%] text-[18px] outline-none border-none bg-transparent "
-              type="text"
-            />
-            <IoIosSearch className="mt-1" />
-          </div>
+          <Search />
           <BsHandbag />
           <GoPerson />
         </div>

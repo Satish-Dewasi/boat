@@ -5,20 +5,10 @@ import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import axios from "axios";
 import { GrNext, GrPrevious } from "react-icons/gr";
+import { useGetProductsQuery } from "../redux/api/productApi";
+import { Link } from "react-router-dom";
 
 const ProductSlider = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    try {
-      axios.get("http://localhost:3000/api/v1/products").then((response) => {
-        setProducts(response.data.products);
-      });
-    } catch (error) {
-      console.log("error in axios" + error);
-    }
-  }, [products]);
-
   const styles = {
     slideEffect: {
       display: "flex",
@@ -83,57 +73,71 @@ const ProductSlider = () => {
     },
   ];
 
+  const [products, setProducts] = useState([]);
+
+  const { data, isLoading, error } = useGetProductsQuery();
+
+  useEffect(() => {
+    if (data && data.products) {
+      setProducts(data.products);
+    }
+  }, [data]);
+
+  const category = "top-picks";
+
   return (
     <>
-      {products.length > 0 ? (
+      {!isLoading > 0 ? (
         <Slide responsive={responsiveSettings} {...properties}>
           {products.map((product) => (
             <div key={product._id} className="overflow-hidden h-[350px] m-2 ">
-              <div className="bg-gray-100 border border-gray-400 rounded-md w-full h-full ">
-                {/* card images */}
-                <div
-                  style={{ backgroundImage: `url(${product.images[1].url})` }}
-                  className="w-full h-[70%] bg-no-repeat overflow-hidden  bg-cover bg-center   "
-                ></div>
+              <Link to={`/product/${category}/${product?._id}`}>
+                <div className="bg-gray-100 border border-gray-400 rounded-md w-full h-full ">
+                  {/* card images */}
+                  <div
+                    style={{ backgroundImage: `url(${product.images[1].url})` }}
+                    className="w-full h-[70%] bg-no-repeat overflow-hidden  bg-cover bg-center   "
+                  ></div>
 
-                {/* card details */}
-                <div className="w-full h-[30%] border-t border-gray-400  p-1 px-2 flex flex-col justify-evenly ">
-                  <div className="capitalize  w-full flex items-center justify-between text-[17px] font-bold  ">
-                    <span> {product.name} </span>
-                    <button className="text-sm p-3 bg-black rounded-[50%] "></button>
-                  </div>
-                  {/* price */}
-                  <div className="flex gap-2 items-center">
-                    <p className=" font-sans text-[18px]  ">
-                      {"$" + product.price}
-                    </p>
-                    <p className=" font-sans text-[15px] line-through text-gray-600 ">
-                      {"$" + Math.ceil((product.price * 130) / 100)}
-                    </p>
-                    <p className=" font-sans text-[17px] text-green-500   ">
-                      30%
-                    </p>
-                  </div>
-
-                  {/* rating and reviews */}
-                  <div className="w-full flex items-center justify-between">
-                    <div className="flex items-center gap-1 font-sans text-[0.7rem] xl:text-[0.9rem] md:text-[0.7rem] sm:text-[0.9rem] ">
-                      <span className="flex items-center gap-2 px-1">
-                        <FaStar className=" text-orange-400 " />
-                        <p className="font-semibold">{product.ratings}</p>
-                      </span>
-                      <span className="border-l border-gray-500 flex px-1 items-center gap-2">
-                        <p>{product.reviews.length}</p>
-                        <GrValidate className="text-blue-500" />
-                      </span>
+                  {/* card details */}
+                  <div className="w-full h-[30%] border-t border-gray-400  p-1 px-2 flex flex-col justify-evenly ">
+                    <div className="capitalize  w-full flex items-center justify-between text-[17px] font-bold  ">
+                      <span> {product.name} </span>
+                      <button className="text-sm p-3 bg-black rounded-[50%] "></button>
+                    </div>
+                    {/* price */}
+                    <div className="flex gap-2 items-center">
+                      <p className=" font-sans text-[18px]  ">
+                        {"$" + product.price}
+                      </p>
+                      <p className=" font-sans text-[15px] line-through text-gray-600 ">
+                        {"$" + Math.ceil((product.price * 130) / 100)}
+                      </p>
+                      <p className=" font-sans text-[17px] text-green-500   ">
+                        30%
+                      </p>
                     </div>
 
-                    <button className="px-3 flex items-center justify-center h-8 bg-black text-[15px] text-white font-bold font-sans rounded-lg ">
-                      Add to cart
-                    </button>
+                    {/* rating and reviews */}
+                    <div className="w-full flex items-center justify-between">
+                      <div className="flex items-center gap-1 font-sans text-[0.7rem] xl:text-[0.9rem] md:text-[0.7rem] sm:text-[0.9rem] ">
+                        <span className="flex items-center gap-2 px-1">
+                          <FaStar className=" text-orange-400 " />
+                          <p className="font-semibold">{product.ratings}</p>
+                        </span>
+                        <span className="border-l border-gray-500 flex px-1 items-center gap-2">
+                          <p>{product.reviews.length}</p>
+                          <GrValidate className="text-blue-500" />
+                        </span>
+                      </div>
+
+                      <button className="px-3 flex items-center justify-center h-8 bg-black text-[15px] text-white font-bold font-sans rounded-lg ">
+                        Add to cart
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           ))}
         </Slide>

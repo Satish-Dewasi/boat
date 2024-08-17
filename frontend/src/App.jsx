@@ -12,12 +12,12 @@ function App() {
       {/* <Cart /> */}
       <Navbar />
       {/* <SIgnUp/> */}
-      
+
       <main>
         <Routes>
           <Route index element={<Hero />} />
           <Route path="/product/:category" element={<Product />} />
-          <Route path="/product/:category/:name/" element={<ProductDetail />} />
+          <Route path="/product/:category/:id/" element={<ProductDetail />} />
         </Routes>
       </main>
     </div>
