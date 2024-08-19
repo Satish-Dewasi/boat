@@ -13,7 +13,7 @@ function Search() {
 
   const handleSubmit = () => {
     if (search?.trim()) {
-      navigate(`/product/:category/?keyword=${search}`);
+      navigate(`/products/?keyword=${search}`);
     }
   };
 

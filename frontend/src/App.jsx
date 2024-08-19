@@ -16,8 +16,9 @@ function App() {
       <main>
         <Routes>
           <Route index element={<Hero />} />
+          <Route path="/products" element={<Product />} />
           <Route path="/product/:category" element={<Product />} />
-          <Route path="/product/:category/:id/" element={<ProductDetail />} />
+          <Route path="/products/:category/:id/" element={<ProductDetail />} />
         </Routes>
       </main>
     </div>

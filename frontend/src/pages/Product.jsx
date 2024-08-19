@@ -3,29 +3,55 @@ import { FaStar } from "react-icons/fa6";
 import { GrValidate } from "react-icons/gr";
 import { IoChevronDown } from "react-icons/io5";
 import { IoOptionsOutline } from "react-icons/io5";
-import { Link, NavLink, useParams } from "react-router-dom";
+import { Link, NavLink, useParams, useSearchParams } from "react-router-dom";
 import { BiSortAlt2 } from "react-icons/bi";
 import FilterSideBar from "../components/FilterSideBar";
+import {
+  useGetProductsByCategoryQuery,
+  useGetProductsQuery,
+} from "../redux/api/productApi";
 import axios from "axios";
 
 function Product() {
   const { category } = useParams();
+  let [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
 
-  const replaceDashesWithSpaces = (str) => {
-    return str.replace(/-/g, " ");
-  };
+  const {
+    data: categoryData,
+    isLoading: categoryLoading,
+    error: categoryError,
+  } = useGetProductsByCategoryQuery(category, { skip: !category });
 
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/v1/products?category=${category}`)
-      .then((response) => {
-        setProducts(response.data.products);
+    const fetchData = async () => {
+      console.log(keyword);
 
-        updateMaxLength();
-      });
-  }, [products]);
+      try {
+        if (keyword) {
+          const { data } = await axios.get(
+            `http://localhost:3000/api/v1/products/?keyword=${keyword}`
+          );
+          setProducts(data.products);
+        } else {
+          setProducts(categoryData?.products);
+        }
+      } catch (error) {
+        setError(error.message || "An error occurred while fetching data");
+      }
+    };
+
+    fetchData();
+
+    // No cleanup function is required here unless the async operation needs to be canceled.
+  }, [keyword, categoryData]);
+
+  const replaceDashesWithSpaces = (str) => {
+    if (!str) return "";
+    return str.replace(/-/g, " ");
+  };
 
   const categoryName = replaceDashesWithSpaces(category);
 
@@ -98,9 +124,9 @@ function Product() {
       </div>
 
       <div className="w-full h-auto p-4 bg-white grid-cols-1  grid md:grid-cols-2 xl:grid-cols-3 gap-4  ">
-        {products.map((product) => (
+        {products?.map((product) => (
           <Link
-            to={`/product/${category}/${product._id}`}
+            to={`/products/${category}/${product._id}`}
             key={product._id}
             className="flex max-w-md overflow-hidden bg-white rounded-lg shadow-lg text-black border-2 border-gray-200"
           >

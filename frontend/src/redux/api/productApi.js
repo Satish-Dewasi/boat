@@ -13,12 +13,25 @@ export const productApi = createApi({
   baseQuery,
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: (params) => "/products",
+      query: (params) => ({
+        url: "/products",
+        params: {
+          keyword: params?.keyword,
+        },
+      }),
     }),
     getProductsDetails: builder.query({
       query: (id) => `/products/${id}`,
     }),
+
+    getProductsByCategory: builder.query({
+      query: (category) => `/product/${category}`,
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useGetProductsDetailsQuery } = productApi;
+export const {
+  useGetProductsQuery,
+  useGetProductsDetailsQuery,
+  useGetProductsByCategoryQuery,
+} = productApi;

@@ -91,7 +91,7 @@ const ProductSlider = () => {
         <Slide responsive={responsiveSettings} {...properties}>
           {products.map((product) => (
             <div key={product._id} className="overflow-hidden h-[350px] m-2 ">
-              <Link to={`/product/${category}/${product?._id}`}>
+              <Link to={`/products/${category}/${product?._id}`}>
                 <div className="bg-gray-100 border border-gray-400 rounded-md w-full h-full ">
                   {/* card images */}
                   <div

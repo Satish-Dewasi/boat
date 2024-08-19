@@ -5,6 +5,7 @@ import {
   getProduct,
   getProductDetails,
   getProductReviews,
+  getProductsByCategory,
   newProduct,
   searchProduct,
   updateProductDetails,
@@ -20,6 +21,7 @@ const router = express.Router();
 router.route("/products").get(getProduct);
 router.route("/product/search").get(searchProduct);
 router.route("/products/:id").get(getProductDetails);
+router.route("/product/:category").get(getProductsByCategory);
 
 // update
 router
@@ -48,14 +50,11 @@ router
 
 router
   .route("/reviews")
-  .put(isAuthenticatedUser,  createProductReview)
-  .get(isAuthenticatedUser,  getProductReviews);
-  
-  
-router.route("/admin/reviews")
-      .delete(isAuthenticatedUser , authorizeRole("admin"), deleteReview);
+  .put(isAuthenticatedUser, createProductReview)
+  .get(isAuthenticatedUser, getProductReviews);
 
-
-
+router
+  .route("/admin/reviews")
+  .delete(isAuthenticatedUser, authorizeRole("admin"), deleteReview);
 
 export default router;
