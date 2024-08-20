@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+      font-family: 'Roboto-Black';
+      src: url('./fonts/Roboto-Black.ttf') format('truetype');
+    }
+}
+
+@layer base {
+    @font-face {
+        font-family: "roboto-thin";
+        font-weight: 400;
+        font-style: normal;
+      src: url('./fonts/Roboto-Thin.ttf') format('truetype');
+    }
+}
+
+@layer base {
+    @font-face {
+        font-family: "roboto-thin-italic";
+        font-weight: 100;
+        font-style: normal;
+      src: url('./fonts/Roboto-ThinItalic.ttf') format('truetype');
+    }
+}
+
+@layer base {
+    @font-face {
+        font-family: "roboto-regular";
+        font-weight: 400;
+        font-style: normal;
+      src: url('./fonts/Roboto-Regular.ttf') format('truetype');
+    }
+}
+
+@layer base {
+    @font-face {
+        font-family: "roboto-medium";
+        font-weight: 500;
+        font-style: normal;
+      src: url('./fonts/Roboto-Medium.ttf') format('truetype');
+    }
+}
+
+@layer base {
+    @font-face {
+        font-family: "roboto-bold";
+        font-weight: 700;
+        font-style: normal;
+      src: url('./fonts/Roboto-Bold.ttf') format('truetype');
+    }
+}
+
+
+/*
+
+.roboto-thin {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.roboto-regular {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-medium {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+*/
